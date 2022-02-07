@@ -1,0 +1,152 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is solace risk api",
+        "version": "0.0.1",
+        "title": "Solace Risk API (alpha)"
+    },
+    "host": "risk-data.solace.fi",
+    "basePath": "/",
+    "schemes": [
+        "https"
+    ],
+    "paths": {
+        "/balances": {
+            "get": {
+                "tags": [
+                    "Balances"
+                ],
+                "summary": "Aggregates balances in each defi protocol found in the given address",
+                "operationId": "getBalances",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "account",
+                        "in": "query",
+                        "description": "The ethereum account you want defi protocol balances for",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string",
+                            "default": "available",
+                            "enum": [
+                                "0xbdF81b19af7848F7384c38E68208885ff0C9F390"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "chain_id",
+                        "in": "query",
+                        "description": "The network you'd like to query.eg ethereum=1",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string",
+                            "default": "1",
+                            "enum": [
+                                "1"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid account value"
+                    }
+                }
+            }
+        },
+        "/scores": {
+            "post": {
+                "tags": [
+                    "Scores"
+                ],
+                "summary": "Calculates risk rate for portfolio of protocols with balances",
+                "description": "The positions array contains a list of objects which are return by calling get balances method. Copy/paste the result of get balances method into the positions array for the time being.",
+                "operationId": "getScores",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Array of objects containing network, appId (aka protocol), balanceUSD",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Portfolio"
+                        }
+                    }
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Portfolio": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "type": "string"
+                },
+                "positions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Portfolio_positions"
+                    }
+                }
+            }
+        },
+        "ApiResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "Portfolio_positions": {
+            "type": "object",
+            "properties": {
+                "network": {
+                    "type": "string"
+                },
+                "appId": {
+                    "type": "string"
+                },
+                "balanceUSD": {
+                    "type": "number"
+                },
+                "balance": {
+                    "type": "number"
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "Find out more about solace",
+        "url": "http://solace.fi"
+    }
+}
