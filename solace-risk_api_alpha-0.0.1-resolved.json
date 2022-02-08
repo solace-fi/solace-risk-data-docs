@@ -139,7 +139,7 @@
                 "balanceUSD": {
                     "type": "number"
                 },
-                "balance": {
+                "balanceETH": {
                     "type": "number"
                 }
             }
