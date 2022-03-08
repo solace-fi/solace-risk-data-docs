@@ -1,147 +1,165 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "description": "This is solace risk api",
-      "version": "0.0.2",
-      "title": "Solace Risk API (alpha)",
-      "termsOfService": "https://solace.fi/terms/",
-      "contact": {
-        "email": "apiteam@solace.fi"
-      },
-      "license": {
-        "name": "Apache 2.0",
-        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-      }
+  "swagger": "2.0",
+  "info": {
+    "description": "This is solace risk api",
+    "version": "0.0.2",
+    "title": "Solace Risk API (alpha)",
+    "termsOfService": "https://solace.fi/terms/",
+    "contact": {
+      "email": "apiteam@solace.fi"
     },
-    "host": "risk-data.solace.fi",
-    "basePath": "/",
-    "schemes": [
-      "https"
-    ],
-    "paths": {
-      "/balances": {
-        "post": {
-          "tags": [
-            "Balances"
-          ],
-          "summary": "Aggregates balances in each defi protocol across chains",
-          "description": "Multiple status values can be provided with comma separated strings",
-          "operationId": "postBalances",
-          "produces": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "body",
-              "description": "Object containing account eg 0x8e07E61216629d0Fe9E8d0334da6ac41A8D11B31 and array of comma seperated chains. 1=mainnet, 137=polygon",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/Chains"
-              }
-            }
-          ],
-          "responses": {
-            "405": {
-              "description": "Invalid input"
-            }
-          }
-        }
-      },
-      "/scores": {
-        "post": {
-          "tags": [
-            "Scores"
-          ],
-          "summary": "Calculates risk rate for portfolio of protocols with balances",
-          "description": "",
-          "operationId": "getScores",
-          "consumes": [
-            "application/json"
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "body",
-              "description": "Array of objects containing network, appId (aka protocol), balanceUSD",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/Portfolio"
-              }
-            }
-          ],
-          "responses": {
-            "405": {
-              "description": "Invalid input"
-            }
-          }
-        }
-      }
-    },
-    "definitions": {
-      "Portfolio": {
-        "type": "object",
-        "properties": {
-          "account": {
-            "type": "string"
-          },
-          "positions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/Portfolio_positions"
-            }
-          }
-        }
-      },
-      "Chains": {
-        "type": "object",
-        "properties": {
-          "account": {
-            "type": "string"
-          },
-          "chains": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          }
-        }
-      },
-      "ApiResponse": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "type": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "Portfolio_positions": {
-        "type": "object",
-        "properties": {
-          "appId": {
-            "type": "string"
-          },
-          "network": {
-            "type": "string"
-          },
-          "balanceUSD": {
-            "type": "number"
-          }
-        }
-      }
-    },
-    "externalDocs": {
-      "description": "Find out more about solace",
-      "url": "http://solace.fi"
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
+  },
+  "host": "risk-data.solace.fi",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/series": {
+      "get": {
+        "tags": [
+          "Series"
+        ],
+        "summary": "List protocol scores and ratings data",
+        "description": "List of covered protocol scores and ratings data",
+        "operationId": "getSeries",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/balances": {
+      "post": {
+        "tags": [
+          "Balances"
+        ],
+        "summary": "Aggregates balances in each defi protocol across chains",
+        "description": "Multiple status values can be provided with comma separated strings",
+        "operationId": "postBalances",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Object containing account eg 0x8e07E61216629d0Fe9E8d0334da6ac41A8D11B31 and array of comma seperated chains. 1=mainnet, 137=polygon",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Chains"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/scores": {
+      "post": {
+        "tags": [
+          "Scores"
+        ],
+        "summary": "Calculates risk rate for portfolio of protocols with balances",
+        "description": "",
+        "operationId": "getScores",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Array of objects containing network, appId (aka protocol), balanceUSD",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Portfolio"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Portfolio": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Portfolio_positions"
+          }
+        }
+      }
+    },
+    "Chains": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "chains": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Portfolio_positions": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "balanceUSD": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about solace",
+    "url": "http://solace.fi"
   }
+}
