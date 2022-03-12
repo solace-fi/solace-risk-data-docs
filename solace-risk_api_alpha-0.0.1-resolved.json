@@ -10,7 +10,7 @@
     },
     "license": {
       "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
   "host": "risk-data.solace.fi",
@@ -22,13 +22,45 @@
     "/series": {
       "get": {
         "tags": [
-          "Series"
+          "Rate Card"
         ],
         "summary": "List protocol scores and ratings data",
         "description": "List of covered protocol scores and ratings data",
         "operationId": "getSeries",
         "produces": [
           "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/premium": {
+      "get": {
+        "tags": [
+          "Quote Policy Price"
+        ],
+        "summary": "Get annual premium for account's current portfolio",
+        "description": "Get annual premium for current account",
+        "operationId": "getPremium",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "query",
+            "description": "account eg 0x9549bf77F664f12C3A6B96F6A631E5bf02D52D60",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "chain_id",
+            "in": "query",
+            "description": "chain_id eg 1=mainnet, 137=polygon",
+            "required": true,
+            "type": "number"
+          }
         ],
         "responses": {
           "405": {
@@ -40,19 +72,16 @@
     "/balances": {
       "post": {
         "tags": [
-          "Balances"
+          "Quote Policy Price"
         ],
         "summary": "Aggregates balances in each defi protocol across chains",
         "description": "Multiple status values can be provided with comma separated strings",
         "operationId": "postBalances",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
             "name": "body",
-            "description": "Object containing account eg 0x8e07E61216629d0Fe9E8d0334da6ac41A8D11B31 and array of comma seperated chains. 1=mainnet, 137=polygon",
+            "description": "Object containing account eg 0x9549bf77F664f12C3A6B96F6A631E5bf02D52D60 and array of comma seperated chains. 1=mainnet, 137=polygon",
             "required": true,
             "schema": {
               "$ref": "#/definitions/Chains"
@@ -69,7 +98,7 @@
     "/scores": {
       "post": {
         "tags": [
-          "Scores"
+          "Quote Policy Price"
         ],
         "summary": "Calculates risk rate for portfolio of protocols with balances",
         "description": "",
@@ -89,6 +118,157 @@
             "schema": {
               "$ref": "#/definitions/Portfolio"
             }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/tracks": {
+      "get": {
+        "tags": [
+          "Account Monitoring"
+        ],
+        "summary": "Get all tracking data for account billing",
+        "description": "Get all tracking files account billing",
+        "operationId": "getTracker",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "account",
+            "in": "query",
+            "description": "account eg 0x9549bf77F664f12C3A6B96F6A631E5bf02D52D60",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "chain_id",
+            "in": "query",
+            "description": "chain_id eg 1=mainnet, 137=polygon",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/billings/all": {
+      "get": {
+        "tags": [
+          "Account Monitoring"
+        ],
+        "summary": "Get all billings for a chain",
+        "description": "Get all billings for a chain",
+        "operationId": "getBillingsAll",
+        "parameters": [
+          {
+            "name": "chain_id",
+            "in": "query",
+            "description": "chain_id eg 1=mainnet, 137=polygon",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/billings": {
+      "get": {
+        "tags": [
+          "Account Monitoring"
+        ],
+        "summary": "Get billings by account",
+        "description": "Get billings by account",
+        "operationId": "getBillingsAccount",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "query",
+            "description": "account eg 0x9549bf77F664f12C3A6B96F6A631E5bf02D52D60",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "chain_id",
+            "in": "query",
+            "description": "chain_id eg 1=mainnet, 137=polygon",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/billings/unpaid": {
+      "get": {
+        "tags": [
+          "Account Monitoring"
+        ],
+        "summary": "Get unpaid billings by account",
+        "description": "Get unpaid billings by account",
+        "operationId": "getBillingsUnpaid",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "query",
+            "description": "account eg 0x9549bf77F664f12C3A6B96F6A631E5bf02D52D60",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "chain_id",
+            "in": "query",
+            "description": "chain_id eg 1=mainnet, 137=polygon",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/billings/paid": {
+      "get": {
+        "tags": [
+          "Account Monitoring"
+        ],
+        "summary": "Get paid billings by account",
+        "description": "Get paid billings by account",
+        "operationId": "getBillingsPaid",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "query",
+            "description": "account eg 0x9549bf77F664f12C3A6B96F6A631E5bf02D52D60",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "chain_id",
+            "in": "query",
+            "description": "chain_id eg 1=mainnet, 137=polygon",
+            "required": true,
+            "type": "number"
           }
         ],
         "responses": {
@@ -160,6 +340,6 @@
   },
   "externalDocs": {
     "description": "Find out more about solace",
-    "url": "http://solace.fi"
+    "url": "https://solace.fi"
   }
 }
